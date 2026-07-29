@@ -64,83 +64,182 @@ INSERT INTO SALGRADE VALUES (5,3001,9999);
 
 -- ===== 연습 문제 (각 문제 아래에 답을 작성) =====
 #1. 사원 테이블의 모든 레코드를 조회하시오.
+select *
+from EMP;
 
 
 #2. 사원명과 입사일을 조회하시오.
+select ENAME, HIREDATE
+from EMP;
 
 
 #3. 사원번호와 이름을 조회하시오.
+select EMPNO, ENAME
+from EMP;
 
 
 #4. 사원테이블에 있는 직책의 목록을 조회하시오. (hint : distinct, group by)
+select distinct JOB
+from EMP;
+
+select JOB
+from EMP
+group by JOB;
 
 
 #5. 총 사원수를 구하시오. (hint : count)
+select count(EMPNO)
+from EMP;
 
 
 #6. 부서번호가 10인 사원을 조회하시오.
+select *
+from EMP
+where DEPTNO=10;
 
 
 #7. 월급여가 2500이상 되는 사원을 조회하시오.
+select *
+from EMP
+where SAL >= 2500;
 
 
 #8. 이름이 'KING'인 사원을 조회하시오.
+select *
+from EMP
+where ENAME = 'KING';
 
 
 #9. 사원들 중 이름이 S로 시작하는 사원의 사원번호와 이름을 조회하시오. (hint : like)
+select EMPNO, ENAME
+from EMP
+where ENAME like 'S%';
 
 
 #10. 사원 이름에 T가 포함된 사원의 사원번호와 이름을 조회하시오. (hint : like)
+select EMPNO, ENAME
+from EMP
+where ENAME like '%T%';
 
 
 #11. 커미션이 300, 500, 1400 인 사원의 사번,이름,커미션을 조회하시오. (hint : OR, in )
+select EMPNO, ENAME, COMM
+from EMP
+where COMM in (300, 500, 1400);
 
 
 #12. 월급여가 1200 에서 3500 사이의 사원의 사번,이름,월급여를 조회하시오. (hint : AND, between)
+select EMPNO, ENAME, SAL
+from EMP
+where SAL between 1200 and 3500;
 
 
 #13. 직급이 매니저이고 부서번호가 30번인 사원의 이름,사번,직급,부서번호를 조회하시오. 
+select ENAME, EMPNO, JOB, DEPTNO
+from EMP
+where JOB = 'MANAGER' and DEPTNO = 30;
 
 
 #14. 부서번호가 30인 아닌 사원의 사번,이름,부서번호를 조회하시오. (not)
+select EMPNO, ENAME, DEPTNO
+from EMP
+where DEPTNO != 30;
 
 
 #15. 커미션이 300, 500, 1400 이 모두 아닌 사원의 사번,이름,커미션을 조회하시오. (hint : not in)
+select EMPNO, ENAME, COMM
+from EMP
+where COMM not in(300, 500, 1400);
 
 
 #16. 이름에 S가 포함되지 않는 사원의 사번,이름을 조회하시오. (hint : not like)
+select EMPNO, ENAME
+from EMP
+where ENAME not like '%S%';
 
 
 #17. 급여가 1200보다 미만이거나 3700 초과하는 사원의 사번,이름,월급여를 조회하시오. (hint : not, between)
+select EMPNO, ENAME, SAL
+from EMP
+where SAL not between 1200 and 3700;
 
 
 #18. 직속상사가 NULL 인 사원의 이름과 직급을 조회하시오. (hint : is null, is not null)
+select ENAME, JOB
+from EMP
+where MGR is null;
 
 
-#19. 부서별 평균월급여를 구하는 쿼리 (hint : group by, avg())
+#19. 부서별 평균월급여를 구하는 쿼리 (hint : group by, avg())     
+select DEPTNO, avg(SAL) as '평균월급여'
+from EMP
+group by DEPTNO;
 
 
 #20. 부서별 전체 사원수와 커미션을 받는 사원들의 수를 구하는 쿼리 (hint : group by, count())
+select DEPTNO, 
+		count(EMPNO) as '전체 사원수',
+		count(COMM) as '커미션 받는 사원수'
+from EMP
+group by DEPTNO;
 
 
 #21. 부서별 최대 급여와 최소 급여를 구하는 쿼리 (hint : group by, min(), max())
+select DEPTNO,
+		max(SAL) as '최대급여',
+		min(SAL) as '최소급여'
+from EMP
+group by DEPTNO;
 
 
 #22. 부서별로 급여 평균 (단, 부서별 급여 평균이 2000 이상만) (hint : group by, having)
+select DEPTNO,
+		avg(SAL) as '급여평균'
+from EMP
+group by DEPTNO
+having avg(SAL) >= 2000;
 
 
 #23. 월급여가 1000 이상인 사원만을 대상으로 부서별로 월급여 평균을 구하라. 단, 평균값이 2000 이상인 레코드만 구하라. (hint : group by, having)
+select DEPTNO,
+		avg(SAL) as '급여평균'
+from EMP
+where SAL >= 1000
+group by DEPTNO
+having avg(SAL) >= 2000;
 
 
 #24. 사원명과 부서명을 조회하시오. (hint : inner join)
+select e.ENAME, d.DNAME
+from EMP e
+inner join DEPT d
+on e.DEPTNO = d.DEPTNO;
 
 
 #25. 이름,월급여,월급여등급을 조회하시오. (hint : inner join, between)
+select e.ENAME, e.SAL, s.GRADE
+from EMP e
+inner join SALGRADE s
+on e.SAL between s.LOSAL and s.HISAL;
 
 
 #26. 이름,부서명,월급여등급을 조회하시오. 
-
+select e.ENAME, d.DNAME, s.GRADE
+from EMP e
+inner join DEPT d
+on e.DEPTNO = d.DEPTNO
+inner join SALGRADE s
+on e.SAL between s.LOSAL and s.HISAL;
 
 #27. 이름,직속상사이름을 조회하시오. (hint : self join)
+select e1.ENAME as '이름',
+		e2.ENAME as '직속상사이름'
+from EMP e1
+inner join EMP e2
+on e1.MGR = e2.EMPNO;
 
 #28. 이름,직속상사이름을 조회하시오.(단 직속 상사가 없는 사람도 직속상사 결과가 null값으로 나와야 함) (hint : outer join)
+select e1.ENAME as '이름',
+		e2.ENAME as '직속상사이름'
+from EMP e1 left join EMP e2
+on e1.MGR = e2.EMPNO;
